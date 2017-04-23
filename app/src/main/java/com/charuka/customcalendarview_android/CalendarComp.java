@@ -95,16 +95,23 @@ public class CalendarComp extends LinearLayout implements View.OnClickListener{
         List<Date> cells=new ArrayList<>();
         Calendar calendar=(Calendar)currentDate.clone();
 
+        //set the calendar to the begining of the month
         calendar.set(Calendar.DAY_OF_MONTH,1);
-//        calendar.set(Calendar.DAY_OF_WEEK,1);
-        int monthBeginingCell=calendar.get(Calendar.DAY_OF_WEEK)-1;
 
+        //determine the starting fay of the month
+        int monthBeginingCell=calendar.get(Calendar.DAY_OF_WEEK)-1;
+        //revert calendar so that when the cells start filling taking dates from it the the
+        // beginning of the month will be aligned properly with the proper day of week
+        calendar.add(Calendar.DAY_OF_MONTH,-(monthBeginingCell-1));
+
+        //filling the cells
         while(cells.size()<DAY_COUNT){
             cells.add(calendar.getTime());
             calendar.add(Calendar.DAY_OF_MONTH,1);
         }
 
 
+        //setting the adapter
         gridView.setAdapter(new CAdapter(getContext(),cells,events));
 
 
@@ -138,10 +145,6 @@ public class CalendarComp extends LinearLayout implements View.OnClickListener{
             super(context, R.layout.calendar_day, days);
             this.eventDays=events;
             inflater=LayoutInflater.from(context);
-
-
-
-
         }
 
         @NonNull
@@ -193,10 +196,6 @@ public class CalendarComp extends LinearLayout implements View.OnClickListener{
                 ((TextView)convertView).setTypeface(null, Typeface.BOLD);
                 ((TextView)convertView).setTextColor(Color.BLUE);
             }
-
-
-
-
 
             ((TextView)convertView).setText(String.valueOf(date.getDate()));
             return convertView;
